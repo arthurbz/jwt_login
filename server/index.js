@@ -5,6 +5,8 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
-app.listen(8000, () => {
-    console.log("Server is running on port 8000");
+app.use("/auth", require("./routes/jwtAuth"));
+
+app.listen(5000, () => {
+    console.log("Server is running on port 5000");
 });
