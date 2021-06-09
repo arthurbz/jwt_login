@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
+const jwtGenerator = require("../utils/jwtGenerator");
 
 router.post("/register", async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const user = await pool.query("SELECT * FROM Users WHERE email = $1;", [email]);
-        console.log("User: ", email);
+        console.log("New user: ", email);
 
         if (user.rows.length !== 0) {
             console.log("User ", email, " aready exists!");
@@ -22,7 +23,9 @@ router.post("/register", async (req, res) => {
             [name, email, bcryptPassword]
         );
 
-        res.json(newUser.rows[0]);
+        const token = jwtGenerator(newUser.rows[0].id);
+
+        res.json({ token });
     } catch (error) {
         console.log(error.message);
         req.status(500).send("Server Error!");
