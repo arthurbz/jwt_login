@@ -64,4 +64,13 @@ router.post("/login", validInfo, async (req, res) => {
     }
 });
 
+router.get("/verify", authorization, async (req, res) => {
+    try {
+        res.json(true);
+    } catch (error) {
+        console.log(error.message);
+        req.status(500).send("Server error!");
+    }
+});
+
 module.exports = router;
