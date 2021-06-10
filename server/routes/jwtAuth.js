@@ -2,9 +2,11 @@ const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
+const validInfo = require("../middleware/validInfo");
+const authorization = require("../middleware/authorization");
 
 /* REGISTER ROUTE*/
-router.post("/register", async (req, res) => {
+router.post("/register", validInfo, async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const user = await pool.query("SELECT * FROM Users WHERE email = $1;", [email]);
@@ -34,7 +36,7 @@ router.post("/register", async (req, res) => {
 });
 
 /* LOGIN ROUTE */
-router.post("/login", async (req, res) => {
+router.post("/login", validInfo, async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -53,7 +55,7 @@ router.post("/login", async (req, res) => {
         }
 
         const token = jwtGenerator(user.rows[0].id);
-
+        console.log("Login: ", user.rows[0].email);
         res.json({ token });
 
     } catch (error) {
