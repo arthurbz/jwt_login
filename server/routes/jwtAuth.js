@@ -40,7 +40,8 @@ router.post("/login", validInfo, async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await pool.query("SELECT name, email, password FROM Users WHERE email = $1;",
+        const user = await pool.query(
+            "SELECT id, name, email, password FROM Users WHERE email = $1;",
             [email]
         );
 
@@ -64,7 +65,7 @@ router.post("/login", validInfo, async (req, res) => {
     }
 });
 
-router.get("/verify", authorization, async (req, res) => {
+router.post("/verify", authorization, async (req, res) => {
     try {
         res.json(true);
     } catch (error) {
