@@ -7,6 +7,11 @@ import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import Register from "./components/Register";
 
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+
+toast.configure();
+
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 

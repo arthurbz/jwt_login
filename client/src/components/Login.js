@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { toast } from "react-toastify";
+
 const Login = ({ setAuth }) => {
     const [inputs, setInputs] = useState({
         email: "",
@@ -31,9 +33,17 @@ const Login = ({ setAuth }) => {
 
             const parseResponse = await response.json();
 
-            localStorage.setItem("token", parseResponse.token);
+            if (parseResponse.token) {
+                localStorage.setItem("token", parseResponse.token);
+                setAuth(true);
+                toast.success("Logged in successfully!");
+            } else {
+                setAuth(false);
+                toast.error("Email or password is invalid!");
+            }
 
-            setAuth(true);
+
+
         } catch (error) {
             console.error(error.message);
         }
